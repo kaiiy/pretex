@@ -3,11 +3,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var minimist = require("minimist");
 var fs = require("fs");
-var loadFileName_1 = require("./lib/loadFileName");
+var load_fname_1 = require("./lib/load-fname");
 // Parse Args
 var argv = minimist(process.argv.slice(2));
-var _a = (0, loadFileName_1.loadTargetDirSrcFileName)(argv), targetDir = _a.targetDir, srcFileName = _a.srcFileName;
-var distFileName = (0, loadFileName_1.loadDistFileName)(argv);
+var _a = (0, load_fname_1.loadTargetDirSrcFileName)(argv), targetDir = _a.targetDir, srcFileName = _a.srcFileName;
+var distFileName = (0, load_fname_1.loadDistFileName)(argv);
 var srcFilePath = targetDir + srcFileName;
 var distFilePath = targetDir + distFileName;
 // Read File
