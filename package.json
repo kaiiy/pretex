@@ -4,8 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node ./src/index.ts",
-    "parse": "ts-node ./src/parser/latex-parser.ts"
+    "start": "ts-node ./src/index.ts"
   },
   "main": "",
   "bin": {
