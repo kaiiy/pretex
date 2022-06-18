@@ -1,12 +1,13 @@
 {
-  "name": "pretex",
-  "version": "1.0.0",
+  "name": "@kaiiy/pretex",
+  "version": "1.0.1",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
     "start": "ts-node ./src/index.ts"
   },
-  "main": "",
+  "main": "./dist/index.js",
+  "author": "kaiiy",
   "bin": {
     "pretex": "./dist/index.js"
   },

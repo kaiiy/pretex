@@ -5,10 +5,6 @@
 | 、  OR , | ，     |
 | . OR 。  | ．     |
 
-# install
-
-`yarn add kaiiy/pretex`
-
 # how to use
 
 `yarn pretex [targetDir/srcFileName] (-o [distFileName](default: out.tex))`
