@@ -1,40 +1,100 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var minimist = require("minimist");
-var fs = require("fs");
-var load_fname_1 = require("./lib/load-fname");
+const minimist = require("minimist");
+const fs = require("fs");
+const load_filepath_1 = require("./lib/load-filepath");
+const parse_line_1 = require("./lib/parse-line");
 // Parse Args
-var argv = minimist(process.argv.slice(2));
-var _a = (0, load_fname_1.loadTargetDirSrcFileName)(argv), targetDir = _a.targetDir, srcFileName = _a.srcFileName;
-var distFileName = (0, load_fname_1.loadDistFileName)(argv);
-var srcFilePath = targetDir + srcFileName;
-var distFilePath = targetDir + distFileName;
+const argv = minimist(process.argv.slice(2));
+const { srcFilePath, distFilePath } = (0, load_filepath_1.loadFilepath)(argv);
 // Read File
-var srcText = fs.readFileSync(srcFilePath, { encoding: "utf-8" });
-var srcTextLines = srcText.split("\n");
+const srcText = fs.readFileSync(srcFilePath, { encoding: 'utf-8' });
+const srcTextLines = srcText.split('\n');
 // Replace
-var beginDocReg = /\\begin\{\s*document\s*\}/;
-var startIdx = srcTextLines.findIndex(function (e) { return beginDocReg.test(e); });
-var endDocReg = /\\end\{\s*document\s*\}/;
-var endIdx = srcTextLines.findIndex(function (e) { return endDocReg.test(e); });
-var ignoreFlag = false;
-var replacedTextLines = srcTextLines.map(function (e, idx) {
+const beginDocReg = /\\begin\{\s*document\s*\}/;
+const startIdx = srcTextLines.findIndex((e) => beginDocReg.test(e));
+const endDocReg = /\\end\{\s*document\s*\}/;
+const endIdx = srcTextLines.findIndex((e) => endDocReg.test(e));
+let isInCommandBlock = false;
+let isInItemize = false;
+let isInEnumerate = false;
+let isInFigureOrTable = false;
+const replacedTextLines = srcTextLines.map((e, idx) => {
+    // in rule 1 (in document block)
     if (startIdx < idx && idx < endIdx) {
-        var commentReg = /^\s*%/;
-        var commandReg = /^\s*\\/;
-        var commandBeginReg = /^\s*\\begin\{.+\}/;
-        var commandEndReg = /^\s*\\end\{.+\}/;
-        if (!(commentReg.test(e) || commandReg.test(e) || ignoreFlag))
-            return e.replace(/(,|、)( |　)*/g, "，").replace(/(\.|。)( |　)*/g, "．");
-        else if (commandBeginReg.test(e))
-            ignoreFlag = true;
-        else if (commandEndReg.test(e))
-            ignoreFlag = false;
+        // rule 2 (comment line)
+        const commentReg = /^\s*%/;
+        if (commentReg.test(e))
+            return e;
+        // rule 4 (command block)
+        // itemize
+        const itemizeBeginReg = /^\\begin\{itemize\}/;
+        const itemizeEndReg = /^\\end\{itemize\}/;
+        if (itemizeBeginReg.test(e)) {
+            isInItemize = true;
+            return e;
+        }
+        else if (itemizeEndReg.test(e)) {
+            isInItemize = false;
+            return e;
+        }
+        else if (isInItemize)
+            return (0, parse_line_1.replaceCommaPeriod)(e);
+        // enumerate
+        const enumerateBeginReg = /^\\begin\{enumerate\}/;
+        const enumerateEndReg = /^\\end\{enumerate\}/;
+        if (enumerateBeginReg.test(e)) {
+            isInEnumerate = true;
+            return (0, parse_line_1.replaceCommaPeriod)(e);
+        }
+        else if (enumerateEndReg.test(e)) {
+            isInEnumerate = false;
+            return e;
+        }
+        else if (isInEnumerate)
+            return (0, parse_line_1.replaceCommaPeriod)(e);
+        // caption (rule 3)
+        const figureBeginReg = /^\\begin\{figure.*\}/;
+        const figureEndReg = /^\\end\{figure.*\}/;
+        const tableBeginReg = /^\\begin\{table.*\}/;
+        const tableEndReg = /^\\end\{table.*\}/;
+        if (figureBeginReg.test(e) || tableBeginReg.test(e)) {
+            isInFigureOrTable = true;
+            return e;
+        }
+        else if (figureEndReg.test(e) || tableEndReg.test(e)) {
+            isInFigureOrTable = false;
+            return e;
+        }
+        else if (isInFigureOrTable) {
+            const captionReg = /^(\s|\t)*\\caption\{.+\}/;
+            if (captionReg.test(e))
+                return (0, parse_line_1.replaceCommaPeriod)(e);
+            return e;
+        }
+        // ignore
+        const commandBlockBeginReg = /^\\begin\{.+\}/;
+        const commandBlockEndReg = /^\\end\{.+\}/;
+        if (commandBlockBeginReg.test(e)) {
+            isInCommandBlock = true;
+            return e;
+        }
+        else if (commandBlockEndReg.test(e)) {
+            isInCommandBlock = false;
+            return e;
+        }
+        else if (isInCommandBlock)
+            return e;
+        // rule 3 (command line)
+        const commandReg = /^\\/;
+        if (commandReg.test(e))
+            return e;
+        return (0, parse_line_1.replaceCommaPeriod)(e);
     }
     return e;
 });
 // Write File
-var distText = replacedTextLines.join("\n");
-fs.writeFileSync(distFilePath, distText, { encoding: "utf-8" });
+const distText = replacedTextLines.join('\n');
+fs.writeFileSync(distFilePath, distText, { encoding: 'utf-8' });
 //# sourceMappingURL=index.js.map
