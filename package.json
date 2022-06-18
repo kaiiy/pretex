@@ -1,5 +1,6 @@
 {
   "name": "@kaiiy/pretex",
+  "description": "replace commas and periods",
   "version": "1.1.0",
   "license": "MIT",
   "scripts": {
