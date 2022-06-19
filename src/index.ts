@@ -34,6 +34,10 @@ const replacedTextLines = srcTextLines.map((e, idx) => {
     const commentReg = /^\s*%/;
     if (commentReg.test(e)) return e;
 
+    // rule 3 (cite)
+    const citeReg = /^(\s)*\\cite\{.+\}/;
+    if (citeReg.test(e)) return replaceCommaPeriod(e);
+
     // rule 4 (command block)
     // itemize
     const itemizeBeginReg = /^\\begin\{itemize\}/;
@@ -69,7 +73,7 @@ const replacedTextLines = srcTextLines.map((e, idx) => {
       isInFigureOrTable = false;
       return e;
     } else if (isInFigureOrTable) {
-      const captionReg = /^(\s|\t)*\\caption\{.+\}/;
+      const captionReg = /^(\s)*\\caption\{.+\}/;
       if (captionReg.test(e)) return replaceCommaPeriod(e);
       return e;
     }
