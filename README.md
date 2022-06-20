@@ -2,12 +2,12 @@
 
 | 変換前   | 変換後 |
 | -------- | ------ |
-| 、  OR , | ，     |
+| , OR 、  | ，     |
 | . OR 。  | ．     |
 
 # install
 
-`yarn add @kaiiy/pretex`
+`yarn add git+https://github.com/kaiiy/pretex.git`
 
 # how to use
 
