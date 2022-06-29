@@ -7,7 +7,7 @@
 
 # install
 
-`yarn add git+https://github.com/kaiiy/pretex.git`
+`yarn add -D git+https://github.com/kaiiy/pretex.git`
 
 # how to use
 
