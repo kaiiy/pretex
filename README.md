@@ -11,9 +11,19 @@
 
 # how to use
 
+## command
+
 `yarn pretex [targetDir/srcFileName] (-o [distFileName](default: out.tex))`
 
 example: `yarn pretex ./src/main.tex -o output.tex`
+
+## api
+
+```js
+import { parseTexStr } from "@kaiiy/pretex"
+
+const distText = parseTexStr(srcText)
+```
 
 # rules
 
