@@ -1,7 +1,7 @@
 {
   "name": "@kaiiy/pretex",
   "description": "replace commas and periods",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "license": "MIT",
   "scripts": {
     "build": "rm -rf ./dist/ && tsc",
