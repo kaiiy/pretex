@@ -5,19 +5,19 @@
 | , OR 、  | ，     |
 | . OR 。  | ．     |
 
-# install
+# Installation
 
 `yarn add -D git+https://github.com/kaiiy/pretex.git`
 
-# how to use
+# Usage
 
-## command
+## Command Line
 
 `yarn pretex [targetDir/srcFileName] (-o [distFileName](default: out.tex))`
 
 example: `yarn pretex ./src/main.tex -o output.tex`
 
-## api
+## API
 
 ```js
 import { parseTexStr } from "@kaiiy/pretex"
@@ -25,7 +25,7 @@ import { parseTexStr } from "@kaiiy/pretex"
 const distText = parseTexStr(srcText)
 ```
 
-# rules
+# Conversion Rules
 
 1. 変換対象は`\begin{document} ..... \end{document}`内の文字
 2. コメント行`% ......`は無変換
