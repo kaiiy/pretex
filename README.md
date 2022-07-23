@@ -1,15 +1,15 @@
 # pretex
 
-| 変換前   | 変換後 |
-| -------- | ------ |
-| , OR 、  | ，     |
-| . OR 。  | ．     |
+| Before  | After |
+| ------- | ----- |
+| , or 、 | ，    |
+| . or 。 | ．    |
 
 # Installation
 
-`yarn add -D git+https://github.com/kaiiy/pretex.git`
+`yarn add -D kaiiy/pretex`
 
-# Usage
+# Usages
 
 ## Command Line
 
